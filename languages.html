@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Languages School — Rabab Academy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            gold: { DEFAULT: '#C9A84C', light: '#E8C97A', dark: '#9E7A2A' },
+            ink:  { DEFAULT: '#1A1612', soft: '#2E2921', muted: '#6B6355' },
+            cream: { DEFAULT: '#FAF7F2', warm: '#F2EDE5' },
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'serif'],
+            body:    ['"DM Sans"', 'sans-serif'],
+            cairo:   ['"Cairo"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #FAF7F2; color: #1A1612; transition: background 0.3s, color 0.3s; }
+    html.dark body { background: #1A1612; color: #FAF7F2; }
+    html[dir="rtl"] body, html[dir="rtl"] .font-display, html[dir="rtl"] .font-body { font-family: 'Cairo', sans-serif !important; }
+    html[dir="rtl"] .tracking-[0.2em], html[dir="rtl"] .tracking-[0.25em], html[dir="rtl"] .tracking-[0.3em], html[dir="rtl"] .tracking-wider, html[dir="rtl"] .tracking-widest { letter-spacing: normal !important; }
+    
+    .dark .bg-cream { background-color: #1A1612; }
+    .dark .bg-cream-warm { background-color: #2E2921; }
+    .dark .text-ink { color: #FAF7F2; }
+    .dark .text-ink-muted { color: #A39B8E; }
+    .dark .border-ink\/15 { border-color: rgba(250, 247, 242, 0.15); }
+    .dark .bg-white { background-color: #2E2921; }
+
+    /* ── Grain overlay ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.4;
+    }
+
+    /* ── Hero ── */
+    .hero-bg {
+      background: linear-gradient(135deg, #1A1612 0%, #2E2921 50%, #1A1612 100%);
+      position: relative; overflow: hidden;
+    }
+
+    /* ── Gold divider ── */
+    .gold-line { height: 1px; background: linear-gradient(90deg, transparent, #C9A84C, transparent); }
+
+    /* ── Course cards ── */
+    .lang-card { transition: transform 0.4s cubic-bezier(.22,.68,0,1.2), box-shadow 0.4s ease; }
+    .lang-card:hover { transform: translateY(-8px); box-shadow: 0 32px 64px rgba(26,22,18,0.18); }
+
+    /* ── CTA button ── */
+    .cta-btn {
+      background: linear-gradient(135deg, #C9A84C, #E8C97A);
+      transition: transform 0.25s, box-shadow 0.25s, filter 0.25s;
+      box-shadow: 0 8px 24px rgba(201,168,76,0.35);
+    }
+    .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(201,168,76,0.45); filter: brightness(1.05); }
+
+    /* ── Section fade-in ── */
+    .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RTL Layout Overrides ── */
+    html[dir="rtl"] .lg\:text-start { text-align: right !important; }
+  </style>
+</head>
+<body class="relative">
+
+<!-- ═══════════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════════ -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-ink/95 backdrop-blur-md border-b border-gold/20">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="flex items-center justify-between h-18 py-4">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-lg">
+          <i class="fa-solid fa-star text-ink text-sm"></i>
+        </div>
+        <div>
+          <span data-i18n="nav_logo_title" class="font-display text-xl font-bold text-cream tracking-wide block leading-tight" style="font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;">Rabab Academy</span>
+          <span data-i18n="nav_logo_subtitle" class="text-[10px] text-gold tracking-[0.25em] uppercase font-body font-light">Premium Design</span>
+        </div>
+      </a>
+      <!-- Back Link -->
+      <a href="/" data-i18n="back_home" class="text-cream/70 hover:text-gold text-sm font-body font-medium transition-colors duration-200">
+        <i class="fa-solid fa-arrow-left mr-2 rtl:hidden"></i>
+        <i class="fa-solid fa-arrow-right ml-2 hidden rtl:inline-block"></i>
+        Back to Home
+      </a>
+      <!-- Toggles -->
+      <div class="flex items-center gap-3 border-l border-gold/20 pl-6 ml-2">
+        <button onclick="toggleDarkMode()" class="text-cream/70 hover:text-gold transition-colors" title="Toggle Dark Mode">
+          <i class="fa-solid fa-moon text-lg" id="dark-icon"></i>
+        </button>
+        <button onclick="toggleLanguage()" class="text-cream/70 hover:text-gold font-body text-sm font-bold transition-colors" title="Change Language">
+          <span id="lang-text">AR</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section class="hero-bg py-32">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 text-center relative z-10">
+    <div class="inline-flex items-center gap-2 bg-gold/15 border border-gold/30 text-gold text-xs font-body tracking-[0.2em] uppercase px-4 py-2 rounded-full mb-8">
+      <i class="fa-solid fa-globe text-[10px]"></i>
+      <span data-i18n="lang_hero_badge">World-Class Education</span>
+    </div>
+    <h1 data-i18n="lang_hero_title" class="font-display text-5xl sm:text-6xl lg:text-8xl font-bold text-cream leading-[1.05] mb-6">
+      Master <em class="text-gold font-light not-italic">Languages</em> <br/>
+      Achieve Fluency
+    </h1>
+    <p data-i18n="lang_hero_desc" class="font-body text-cream/60 text-lg leading-relaxed max-w-2xl mx-auto mb-10">
+      Our Language School offers immersive, conversation-focused programs in English, French, Italian, and German. Designed for real-world confidence.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     LANGUAGES GRID
+═══════════════════════════════════════════ -->
+<section class="py-24 bg-cream">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+      
+      <!-- English -->
+      <div class="lang-card bg-white rounded-3xl p-8 lg:p-10 border border-ink/5 shadow-md fade-up">
+        <div class="flex items-center gap-5 mb-6">
+          <div class="w-16 h-16 rounded-2xl bg-gold/10 flex items-center justify-center text-gold text-3xl">
+            <i class="fa-solid fa-language"></i>
+          </div>
+          <div>
+            <h2 data-i18n="lang_en_title" class="font-display text-3xl font-bold text-ink">English</h2>
+            <p data-i18n="lang_en_subtitle" class="text-gold text-xs tracking-widest uppercase font-body">International Communication</p>
+          </div>
+        </div>
+        <p data-i18n="lang_en_desc" class="text-ink-muted font-body text-sm leading-relaxed mb-8">
+          Master the global language of business and technology. Our curriculum covers grammar, professional writing, and intensive conversation.
+        </p>
+        <div class="grid grid-cols-2 gap-4 border-t border-ink/5 pt-8">
+          <div>
+            <span data-i18n="info_price" class="block text-[10px] text-ink-muted uppercase tracking-widest mb-1">Price</span>
+            <span data-i18n="lang_en_price" class="text-xl font-display font-bold text-ink">8,000 DA / Month</span>
+          </div>
+          <div>
+            <span data-i18n="info_time" class="block text-[10px] text-ink-muted uppercase tracking-widest mb-1">Duration</span>
+            <span data-i18n="lang_en_time" class="text-xl font-display font-bold text-ink">6 Months</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- French -->
+      <div class="lang-card bg-white rounded-3xl p-8 lg:p-10 border border-ink/5 shadow-md fade-up" style="transition-delay: 0.1s">
+        <div class="flex items-center gap-5 mb-6">
+          <div class="w-16 h-16 rounded-2xl bg-gold/10 flex items-center justify-center text-gold text-3xl">
+            <i class="fa-solid fa-earth-europe"></i>
+          </div>
+          <div>
+            <h2 data-i18n="lang_fr_title" class="font-display text-3xl font-bold text-ink">French</h2>
+            <p data-i18n="lang_fr_subtitle" class="text-gold text-xs tracking-widest uppercase font-body">Culture & Diplomacy</p>
+          </div>
+        </div>
+        <p data-i18n="lang_fr_desc" class="text-ink-muted font-body text-sm leading-relaxed mb-8">
+          Enhance your career with French. Focus on DELF/DALF preparation, business French, and sophisticated conversational skills.
+        </p>
+        <div class="grid grid-cols-2 gap-4 border-t border-ink/5 pt-8">
+          <div>
+            <span data-i18n="info_price" class="block text-[10px] text-ink-muted uppercase tracking-widest mb-1">Price</span>
+            <span data-i18n="lang_fr_price" class="text-xl font-display font-bold text-ink">7,500 DA / Month</span>
+          </div>
+          <div>
+            <span data-i18n="info_time" class="block text-[10px] text-ink-muted uppercase tracking-widest mb-1">Duration</span>
+            <span data-i18n="lang_fr_time" class="text-xl font-display font-bold text-ink">6 Months</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Italian -->
+      <div class="lang-card bg-white rounded-3xl p-8 lg:p-10 border border-ink/5 shadow-md fade-up" style="transition-delay: 0.2s">
+        <div class="flex items-center gap-5 mb-6">
+          <div class="w-16 h-16 rounded-2xl bg-gold/10 flex items-center justify-center text-gold text-3xl">
+            <i class="fa-solid fa-pizza-slice"></i>
+          </div>
+          <div>
+            <h2 data-i18n="lang_it_title" class="font-display text-3xl font-bold text-ink">Italian</h2>
+            <p data-i18n="lang_it_subtitle" class="text-gold text-xs tracking-widest uppercase font-body">Art & Gastronomy</p>
+          </div>
+        </div>
+        <p data-i18n="lang_it_desc" class="text-ink-muted font-body text-sm leading-relaxed mb-8">
+          Discover the language of music and art. Perfect for travel, study abroad, or personal enrichment with native-level instructors.
+        </p>
+        <div class="grid grid-cols-2 gap-4 border-t border-ink/5 pt-8">
+          <div>
+            <span data-i18n="info_price" class="block text-[10px] text-ink-muted uppercase tracking-widest mb-1">Price</span>
+            <span data-i18n="lang_it_price" class="text-xl font-display font-bold text-ink">9,000 DA / Month</span>
+          </div>
+          <div>
+            <span data-i18n="info_time" class="block text-[10px] text-ink-muted uppercase tracking-widest mb-1">Duration</span>
+            <span data-i18n="lang_it_time" class="text-xl font-display font-bold text-ink">4 Months</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- German -->
+      <div class="lang-card bg-white rounded-3xl p-8 lg:p-10 border border-ink/5 shadow-md fade-up" style="transition-delay: 0.3s">
+        <div class="flex items-center gap-5 mb-6">
+          <div class="w-16 h-16 rounded-2xl bg-gold/10 flex items-center justify-center text-gold text-3xl">
+            <i class="fa-solid fa-gears"></i>
+          </div>
+          <div>
+            <h2 data-i18n="lang_de_title" class="font-display text-3xl font-bold text-ink">German</h2>
+            <p data-i18n="lang_de_subtitle" class="text-gold text-xs tracking-widest uppercase font-body">Engineering & Innovation</p>
+          </div>
+        </div>
+        <p data-i18n="lang_de_desc" class="text-ink-muted font-body text-sm leading-relaxed mb-8">
+          Unlock opportunities in Europe's largest economy. Specialized courses for engineers, medical professionals, and students.
+        </p>
+        <div class="grid grid-cols-2 gap-4 border-t border-ink/5 pt-8">
+          <div>
+            <span data-i18n="info_price" class="block text-[10px] text-ink-muted uppercase tracking-widest mb-1">Price</span>
+            <span data-i18n="lang_de_price" class="text-xl font-display font-bold text-ink">10,000 DA / Month</span>
+          </div>
+          <div>
+            <span data-i18n="info_time" class="block text-[10px] text-ink-muted uppercase tracking-widest mb-1">Duration</span>
+            <span data-i18n="lang_de_time" class="text-xl font-display font-bold text-ink">5 Months</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CTA
+═══════════════════════════════════════════ -->
+<section class="py-20 bg-ink text-center">
+  <div class="max-w-3xl mx-auto px-6">
+    <h2 data-i18n="lang_cta_title" class="font-display text-4xl font-bold text-cream mb-6">Ready to start your journey?</h2>
+    <a href="/#enroll" data-i18n="lang_cta_btn" class="cta-btn inline-block text-ink font-body font-semibold px-10 py-4 rounded-full text-lg">Enroll in Language School</a>
+  </div>
+</section>
+
+<footer class="bg-ink py-10 border-t border-gold/10">
+  <div class="max-w-7xl mx-auto px-6 text-center text-cream/30 font-body text-xs">
+    <span data-i18n="footer_copy">© 2025 Rabab Academy. All rights reserved.</span>
+  </div>
+</footer>
+
+<script>
+  // Intersection Observer for fade-up
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  const translations = {
+    en: {
+      nav_logo_title: "Rabab Academy", nav_logo_subtitle: "Premium Design",
+      back_home: "Back to Home",
+      lang_hero_badge: "World-Class Education",
+      lang_hero_title: "Master <em class='text-gold font-light not-italic'>Languages</em> <br/>Achieve Fluency",
+      lang_hero_desc: "Our Language School offers immersive, conversation-focused programs in English, French, Italian, and German. Designed for real-world confidence.",
+      lang_en_title: "English", lang_en_subtitle: "International Communication", lang_en_desc: "Master the global language of business and technology. Our curriculum covers grammar, professional writing, and intensive conversation.",
+      lang_en_price: "8,000 DA / Month", lang_en_time: "6 Months",
+      lang_fr_title: "French", lang_fr_subtitle: "Culture & Diplomacy", lang_fr_desc: "Enhance your career with French. Focus on DELF/DALF preparation, business French, and sophisticated conversational skills.",
+      lang_fr_price: "7,500 DA / Month", lang_fr_time: "6 Months",
+      lang_it_title: "Italian", lang_it_subtitle: "Art & Gastronomy", lang_it_desc: "Discover the language of music and art. Perfect for travel, study abroad, or personal enrichment with native-level instructors.",
+      lang_it_price: "9,000 DA / Month", lang_it_time: "4 Months",
+      lang_de_title: "German", lang_de_subtitle: "Engineering & Innovation", lang_de_desc: "Unlock opportunities in Europe's largest economy. Specialized courses for engineers, medical professionals, and students.",
+      lang_de_price: "10,000 DA / Month", lang_de_time: "5 Months",
+      info_price: "Price", info_time: "Duration",
+      lang_cta_title: "Ready to start your journey?", lang_cta_btn: "Enroll in Language School",
+      footer_copy: "© 2025 Rabab Academy. All rights reserved."
+    },
+    ar: {
+      nav_logo_title: "أكاديمية رباب", nav_logo_subtitle: "تصميم متميز",
+      back_home: "العودة للرئيسية",
+      lang_hero_badge: "تعليم بمستوى عالمي",
+      lang_hero_title: "أتقن <em class='text-gold font-light not-italic'>اللغات</em> <br/>وحقق الطلاقة",
+      lang_hero_desc: "تقدم مدرسة اللغات لدينا برامج غامرة تركز على المحادثة باللغات الإنجليزية، الفرنسية، الإيطالية، والألمانية. مصممة للثقة في العالم الحقيقي.",
+      lang_en_title: "الإنجليزية", lang_en_subtitle: "التواصل الدولي", lang_en_desc: "أتقن اللغة العالمية للأعمال والتكنولوجيا. يغطي منهجنا القواعد، الكتابة المهنية، والمحادثة المكثفة.",
+      lang_en_price: "8,000 دج / شهر", lang_en_time: "6 أشهر",
+      lang_fr_title: "الفرنسية", lang_fr_subtitle: "الثقافة والدبلوماسية", lang_fr_desc: "عزز مسيرتك المهنية باللغة الفرنسية. التركيز على التحضير لشهادات DELF/DALF، الفرنسية للأعمال، ومهارات المحادثة الراقية.",
+      lang_fr_price: "7,500 دج / شهر", lang_fr_time: "6 أشهر",
+      lang_it_title: "الإيطالية", lang_it_subtitle: "الفن والطبخ", lang_it_desc: "اكتشف لغة الموسيقى والفن. مثالية للسفر، الدراسة في الخارج، أو الإثراء الشخصي مع مدربين بمستوى لغة الأم.",
+      lang_it_price: "9,000 دج / شهر", lang_it_time: "4 أشهر",
+      lang_de_title: "الألمانية", lang_de_subtitle: "الهندسة والابتكار", lang_de_desc: "افتح الفرص في أكبر اقتصاد في أوروبا. دورات متخصصة للمهندسين، الممارسين الطبيين، والطلاب.",
+      lang_de_price: "10,000 دج / شهر", lang_de_time: "5 أشهر",
+      info_price: "السعر", info_time: "المدة",
+      lang_cta_title: "هل أنت مستعد لبدء رحلتك؟", lang_cta_btn: "سجل في مدرسة اللغات",
+      footer_copy: "© 2025 أكاديمية رباب. جميع الحقوق محفوظة."
+    }
+  };
+
+  let currentLang = localStorage.getItem('lang') || 'ar';
+  let isDarkMode = localStorage.getItem('theme') === 'dark';
+
+  function applyLanguage() {
+    document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+    document.documentElement.setAttribute('lang', currentLang);
+    const langText = document.getElementById('lang-text');
+    if(langText) langText.innerText = currentLang === 'ar' ? 'EN' : 'AR';
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if(translations[currentLang] && translations[currentLang][key]) {
+        el.innerHTML = translations[currentLang][key];
+      }
+    });
+  }
+
+  function toggleLanguage() {
+    currentLang = currentLang === 'en' ? 'ar' : 'en';
+    localStorage.setItem('lang', currentLang);
+    applyLanguage();
+  }
+
+  function applyTheme() {
+    const icon = document.getElementById('dark-icon');
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      if(icon) { icon.classList.remove('fa-moon'); icon.classList.add('fa-sun'); }
+    } else {
+      document.documentElement.classList.remove('dark');
+      if(icon) { icon.classList.remove('fa-sun'); icon.classList.add('fa-moon'); }
+    }
+  }
+
+  function toggleDarkMode() {
+    isDarkMode = !isDarkMode;
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    applyTheme();
+  }
+
+  applyTheme();
+  applyLanguage();
+</script>
+
+</body>
+</html>

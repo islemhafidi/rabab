@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rabab Academy — Master Your Craft</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            gold: { DEFAULT: '#C9A84C', light: '#E8C97A', dark: '#9E7A2A' },
+            ink:  { DEFAULT: '#1A1612', soft: '#2E2921', muted: '#6B6355' },
+            cream: { DEFAULT: '#FAF7F2', warm: '#F2EDE5' },
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'serif'],
+            body:    ['"DM Sans"', 'sans-serif'],
+            cairo:   ['"Cairo"', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #FAF7F2; color: #1A1612; transition: background 0.3s, color 0.3s; }
+    html.dark body { background: #1A1612; color: #FAF7F2; }
+    html[dir="rtl"] body, html[dir="rtl"] .font-display, html[dir="rtl"] .font-body { font-family: 'Cairo', sans-serif !important; }
+    html[dir="rtl"] .tracking-[0.2em], html[dir="rtl"] .tracking-[0.25em], html[dir="rtl"] .tracking-[0.3em], html[dir="rtl"] .tracking-wider, html[dir="rtl"] .tracking-widest { letter-spacing: normal !important; }
+    
+    .dark .bg-cream { background-color: #1A1612; }
+    .dark .bg-cream-warm { background-color: #2E2921; }
+    .dark .text-ink { color: #FAF7F2; }
+    .dark .text-ink-muted { color: #A39B8E; }
+    .dark .border-ink\/5 { border-color: rgba(250, 247, 242, 0.05); }
+    .dark .border-ink\/15 { border-color: rgba(250, 247, 242, 0.15); }
+    .dark .border-ink\/20 { border-color: rgba(250, 247, 242, 0.20); }
+    .dark .bg-white { background-color: #2E2921; }
+    .dark .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5); }
+    .dark .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
+    .dark .bg-cream\/5 { background-color: rgba(26, 22, 18, 0.5); }
+    .dark .border-cream\/10 { border-color: rgba(250, 247, 242, 0.1); }
+
+    /* ── Grain overlay ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.4;
+    }
+
+    /* ── Hero ── */
+    .hero-bg {
+      background: linear-gradient(135deg, #1A1612 0%, #2E2921 50%, #1A1612 100%);
+      position: relative; overflow: hidden;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(201,168,76,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-img-wrap { position: relative; }
+    .hero-img-wrap::before {
+      content: '';
+      position: absolute; inset: -12px; border: 1px solid rgba(201,168,76,0.35);
+      transform: rotate(2deg); border-radius: 4px; z-index: 0;
+    }
+    .hero-img-wrap::after {
+      content: '';
+      position: absolute; inset: -24px; border: 1px solid rgba(201,168,76,0.15);
+      transform: rotate(-1.5deg); border-radius: 4px; z-index: 0;
+    }
+
+    /* ── Gold divider ── */
+    .gold-line { height: 1px; background: linear-gradient(90deg, transparent, #C9A84C, transparent); }
+
+    /* ── Course cards ── */
+    .course-card { transition: transform 0.4s cubic-bezier(.22,.68,0,1.2), box-shadow 0.4s ease; }
+    .course-card:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 32px 64px rgba(26,22,18,0.18); }
+    .course-card:hover .card-img { transform: scale(1.06); }
+    .card-img { transition: transform 0.6s cubic-bezier(.22,.68,0,1.2); }
+    .course-card:hover .view-btn { background: #C9A84C; color: #1A1612; }
+    .view-btn { transition: background 0.3s, color 0.3s, letter-spacing 0.3s; }
+    .course-card:hover .view-btn { letter-spacing: 0.08em; }
+
+    /* ── Number counter ── */
+    .stat-num { font-family: 'Cormorant Garamond', serif; }
+
+    /* ── Form inputs ── */
+    .form-input:focus { outline: none; border-color: #C9A84C; box-shadow: 0 0 0 3px rgba(201,168,76,0.15); }
+    .field-radio input:checked + label { background: #C9A84C; color: #1A1612; border-color: #C9A84C; }
+    .field-radio label { transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.2s; }
+    .field-radio label:hover { transform: translateY(-2px); border-color: #C9A84C; }
+
+    /* ── Nav ── */
+    .nav-link { position: relative; }
+    .nav-link::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 0; height: 1px; background: #C9A84C; transition: width 0.3s; }
+    .nav-link:hover::after { width: 100%; }
+
+    /* ── CTA button ── */
+    .cta-btn {
+      background: linear-gradient(135deg, #C9A84C, #E8C97A);
+      transition: transform 0.25s, box-shadow 0.25s, filter 0.25s;
+      box-shadow: 0 8px 24px rgba(201,168,76,0.35);
+    }
+    .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(201,168,76,0.45); filter: brightness(1.05); }
+    .cta-btn:active { transform: translateY(0); }
+
+    /* ── Section fade-in ── */
+    .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Zigzag section separator ── */
+    .zigzag { clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%); }
+
+    /* ── Submit btn ── */
+    .submit-btn { transition: transform 0.25s, box-shadow 0.25s; }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(201,168,76,0.4); }
+
+    /* ── Testimonials ── */
+    .tcard { transition: transform 0.3s; }
+    .tcard:hover { transform: translateY(-4px); }
+
+    /* ── Mobile menu ── */
+    #mobile-menu { transition: max-height 0.4s ease, opacity 0.4s ease; max-height: 0; opacity: 0; overflow: hidden; }
+    #mobile-menu.open { max-height: 400px; opacity: 1; }
+
+    /* ── RTL Layout Overrides ── */
+    html[dir="rtl"] .lg\:rtl\:order-1 { order: 1 !important; }
+    html[dir="rtl"] .lg\:rtl\:order-2 { order: 2 !important; }
+    html[dir="rtl"] .lg\:text-start { text-align: right !important; }
+    html[dir="rtl"] .lg\:ms-0 { margin-right: 0 !important; margin-left: auto !important; }
+  </style>
+</head>
+<body class="relative">
+
+<!-- ═══════════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════════ -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-ink/95 backdrop-blur-md border-b border-gold/20">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="flex items-center justify-between h-18 py-4">
+
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-lg">
+          <i class="fa-solid fa-star text-ink text-sm"></i>
+        </div>
+        <div>
+          <span data-i18n="nav_logo_title" class="font-display text-xl font-bold text-cream tracking-wide block leading-tight" style="font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;">Rabab Academy</span>
+          <span data-i18n="nav_logo_subtitle" class="text-[10px] text-gold tracking-[0.25em] uppercase font-body font-light">Premium Skills</span>
+        </div>
+      </a>
+
+      <!-- Desktop nav -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#courses" data-i18n="nav_courses" class="nav-link text-cream/70 hover:text-cream text-sm font-body font-medium transition-colors duration-200">Courses</a>
+        <a href="#about" data-i18n="nav_about" class="nav-link text-cream/70 hover:text-cream text-sm font-body font-medium transition-colors duration-200">About</a>
+        <a href="#testimonials" data-i18n="nav_stories" class="nav-link text-cream/70 hover:text-cream text-sm font-body font-medium transition-colors duration-200">Stories</a>
+        <a href="#enroll" data-i18n="nav_enroll" class="cta-btn text-ink text-sm font-body font-semibold px-6 py-2.5 rounded-full">Enroll Now</a>
+        
+        <!-- Toggles -->
+        <div class="flex items-center gap-3 border-l border-gold/20 pl-6 ml-2">
+          <button onclick="toggleDarkMode()" class="text-cream/70 hover:text-gold transition-colors" title="Toggle Dark Mode">
+            <i class="fa-solid fa-moon text-lg" id="dark-icon"></i>
+          </button>
+          <button onclick="toggleLanguage()" class="text-cream/70 hover:text-gold font-body text-sm font-bold transition-colors" title="Change Language">
+            <span id="lang-text">AR</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Hamburger -->
+      <button onclick="document.getElementById('mobile-menu').classList.toggle('open')" class="md:hidden text-cream p-2">
+        <i class="fa-solid fa-bars text-xl"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="md:hidden bg-ink-soft border-t border-gold/20">
+    <div class="px-6 py-4 flex flex-col gap-4">
+      <a href="#courses" data-i18n="nav_courses" class="text-cream/80 font-body text-sm py-2 border-b border-gold/10">Courses</a>
+      <a href="#about" data-i18n="nav_about" class="text-cream/80 font-body text-sm py-2 border-b border-gold/10">About</a>
+      <a href="#testimonials" data-i18n="nav_stories" class="text-cream/80 font-body text-sm py-2 border-b border-gold/10">Stories</a>
+      <a href="#enroll" data-i18n="nav_enroll" class="cta-btn text-center text-ink text-sm font-body font-semibold px-6 py-3 rounded-full mt-2">Enroll Now</a>
+      
+      <div class="flex items-center justify-between border-t border-gold/10 pt-4 mt-2">
+        <button onclick="toggleDarkMode()" class="text-cream/70 hover:text-gold transition-colors text-sm font-body flex items-center gap-2">
+          <i class="fa-solid fa-moon" id="dark-icon-mobile"></i> Dark Mode
+        </button>
+        <button onclick="toggleLanguage()" class="text-cream/70 hover:text-gold font-body text-sm font-bold transition-colors">
+          <i class="fa-solid fa-globe mr-1"></i> <span id="lang-text-mobile">AR</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section class="hero-bg min-h-screen flex items-center pt-20">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 py-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+
+    <!-- Text -->
+    <div class="text-center lg:text-start lg:rtl:order-2">
+      <div class="inline-flex items-center gap-2 bg-gold/15 border border-gold/30 text-gold text-xs font-body tracking-[0.2em] uppercase px-4 py-2 rounded-full mb-8" style="color: #1b1612; background-color: #dfbf6c;">
+        <i class="fa-solid fa-certificate text-[10px]"></i>
+        <span data-i18n="hero_badge" style="color: #1b1612;">Certified Excellence</span>
+      </div>
+
+      <h1 data-i18n="hero_title" class="font-display text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-cream leading-[1.05] mb-6">
+        Craft Your <br/>
+        <em class="text-gold font-light not-italic">Future</em> <br/>
+        With Skill
+      </h1>
+
+      <p data-i18n="hero_desc" class="font-body text-cream/60 text-lg leading-relaxed max-w-md mx-auto lg:ms-0 mb-10">
+        Premium hands-on training in Sewing, Hairdressing, Languages & Cupping Therapy. Transform passion into profession with world-class instructors.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+        <a href="#enroll" data-i18n="hero_btn1" class="cta-btn text-ink font-body font-semibold px-8 py-4 rounded-full text-base inline-block">
+          Start Your Journey &nbsp;<i class="fa-solid fa-arrow-right text-sm"></i>
+        </a>
+        <a href="#courses" data-i18n="hero_btn2" class="border border-cream/25 text-cream font-body font-medium px-8 py-4 rounded-full text-base hover:border-gold/50 hover:text-gold transition-all duration-300 inline-block text-center">
+          Explore Courses
+        </a>
+      </div>
+
+      <!-- Stats row -->
+      <div class="mt-14 flex justify-center lg:justify-start gap-10 border-t border-cream/10 pt-8">
+        <div>
+          <div class="stat-num text-3xl font-bold text-gold">1,200<span class="text-gold-light">+</span></div>
+          <div class="text-cream/40 text-xs font-body mt-1 tracking-wider uppercase" data-i18n="stat_graduates">Graduates</div>
+        </div>
+        <div class="w-px bg-cream/10"></div>
+        <div>
+          <div class="stat-num text-3xl font-bold text-gold">4</div>
+          <div class="text-cream/40 text-xs font-body mt-1 tracking-wider uppercase" data-i18n="stat_spec">Specializations</div>
+        </div>
+        <div class="w-px bg-cream/10"></div>
+        <div>
+          <div class="stat-num text-3xl font-bold text-gold">98<span class="text-sm font-body">%</span></div>
+          <div class="text-cream/40 text-xs font-body mt-1 tracking-wider uppercase" data-i18n="stat_sat">Satisfaction</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero image collage -->
+    <div class="lg:grid grid-cols-2 gap-4 h-[600px] lg:rtl:order-1">
+      <div class="flex flex-col gap-4">
+        <div class="hero-img-wrap rounded-2xl overflow-hidden h-64 relative z-10">
+          <img src="sweets.jpg" alt="Traditional Sweets" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent"></div>
+          <span data-i18n="hero_img1" class="absolute bottom-4 left-4 font-display text-cream text-lg italic">Traditional Sweets</span>
+        </div>
+        <div class="rounded-2xl overflow-hidden flex-1 relative z-10">
+          <img src="hairdressing.jpg" alt="Hair salon" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent"></div>
+          <span data-i18n="hero_img2" class="absolute bottom-4 left-4 font-display text-cream text-lg italic">Hairdressing</span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-4 mt-8">
+        <div class="rounded-2xl overflow-hidden flex-1 relative z-10">
+          <img src="mickey.jpg" alt="Kids Activities" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent"></div>
+          <span data-i18n="hero_img3" class="absolute bottom-4 left-4 font-display text-cream text-lg italic">Kids Activities</span>
+        </div>
+        <div class="rounded-2xl overflow-hidden h-48 relative z-10">
+          <img src="coloring.jpg" alt="Languages" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent"></div>
+          <span data-i18n="hero_img4" class="absolute bottom-4 left-4 font-display text-cream text-lg italic">Languages</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decorative scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-cream/30 z-10 animate-bounce">
+    <span class="text-xs font-body tracking-widest uppercase">Scroll</span>
+    <i class="fa-solid fa-chevron-down text-xs"></i>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     BRAND BAR
+═══════════════════════════════════════════ -->
+<section class="bg-cream-warm py-8 border-y border-gold/20">
+  <div class="max-w-5xl mx-auto px-6 flex flex-wrap justify-center gap-10 items-center text-ink-muted font-body text-sm">
+    <span class="flex items-center gap-2"><i class="fa-solid fa-medal text-gold"></i> <span data-i18n="brand_1">Ministry Certified</span></span>
+    <span class="w-px h-4 bg-ink/15 hidden sm:block"></span>
+    <span class="flex items-center gap-2"><i class="fa-solid fa-users text-gold"></i> <span data-i18n="brand_2">Expert Instructors</span></span>
+    <span class="w-px h-4 bg-ink/15 hidden sm:block"></span>
+    <span class="flex items-center gap-2"><i class="fa-solid fa-certificate text-gold"></i> <span data-i18n="brand_3">Accredited Certificates</span></span>
+    <span class="w-px h-4 bg-ink/15 hidden sm:block"></span>
+    <span class="flex items-center gap-2"><i class="fa-solid fa-clock text-gold"></i> <span data-i18n="brand_4">Flexible Schedules</span></span>
+    <span class="w-px h-4 bg-ink/15 hidden sm:block"></span>
+    <span class="flex items-center gap-2"><i class="fa-solid fa-hands-helping text-gold"></i> <span data-i18n="brand_5">Lifetime Support</span></span>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     COURSES GALLERY
+═══════════════════════════════════════════ -->
+<section id="courses" class="py-28 bg-cream">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+    <!-- Heading -->
+    <div class="text-center mb-20 fade-up">
+      <p class="font-body text-gold text-xs tracking-[0.3em] uppercase mb-4 font-medium"><span data-i18n="courses_sub">Our Specializations</span></p>
+      <h2 data-i18n="courses_title" class="font-display text-5xl lg:text-6xl font-bold text-ink mb-5">
+        Four Paths to <em class="font-light not-italic text-gold">Mastery</em>
+      </h2>
+      <div class="gold-line w-24 mx-auto mb-6"></div>
+      <p data-i18n="courses_desc" class="text-ink-muted font-body max-w-xl mx-auto leading-relaxed">
+        Immerse yourself in a discipline that speaks to you. Each program is designed by industry experts to take you from beginner to professional.
+      </p>
+    </div>
+
+    <!-- Cards grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8">
+
+      <!-- Card 1: Sewing -->
+      <div class="course-card bg-white rounded-3xl overflow-hidden shadow-md group fade-up" style="transition-delay:0s">
+        <div class="overflow-hidden h-56 relative">
+          <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=700&q=80&fit=crop" alt="Sewing" class="card-img w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent"></div>
+          <div class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gold flex items-center justify-center shadow">
+            <i class="fa-solid fa-scissors text-ink text-xs"></i>
+          </div>
+          <div class="absolute bottom-4 left-4">
+            <span data-i18n="badge_pop" class="bg-gold/90 text-ink text-[10px] font-body font-semibold tracking-widest uppercase px-3 py-1 rounded-full">Popular</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 data-i18n="c1_title" class="font-display text-2xl font-bold text-ink mb-2">Sewing & Fashion</h3>
+          <p data-i18n="c1_desc" class="font-body text-ink-muted text-sm leading-relaxed mb-5">
+            From basic stitching to haute couture. Master patterns, tailoring, and garment construction with professional machines.
+          </p>
+          <div class="flex items-center justify-between text-xs text-ink-muted font-body mb-5">
+            <span><i class="fa-regular fa-clock text-gold mr-1"></i> <span data-i18n="c1_dur">3 Months</span></span>
+            <span><i class="fa-solid fa-layer-group text-gold mr-1"></i> <span data-i18n="c1_lvl">All Levels</span></span>
+          </div>
+          <a href="file:///C:/Users/islem/Downloads/sewing.html" data-i18n="course_view" class="view-btn block text-center border border-ink/20 text-ink text-xs font-body font-semibold tracking-widest uppercase px-4 py-3 rounded-full">
+            View Course
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 2: Hairdressing -->
+      <div class="course-card bg-white rounded-3xl overflow-hidden shadow-md group fade-up" style="transition-delay:0.1s">
+        <div class="overflow-hidden h-56 relative">
+          <img src="hairdressing.jpg" alt="Hairdressing" class="card-img w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent"></div>
+          <div class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gold flex items-center justify-center shadow">
+            <i class="fa-solid fa-cut text-ink text-xs"></i>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 data-i18n="c2_title" class="font-display text-2xl font-bold text-ink mb-2">Hairdressing & Barbering</h3>
+          <p data-i18n="c2_desc" class="font-body text-ink-muted text-sm leading-relaxed mb-5">
+            Learn cuts, coloring, styling, and barbering techniques from salon professionals. Build your clientele from day one.
+          </p>
+          <div class="flex items-center justify-between text-xs text-ink-muted font-body mb-5">
+            <span><i class="fa-regular fa-clock text-gold mr-1"></i> <span data-i18n="c2_dur">4 Months</span></span>
+            <span><i class="fa-solid fa-layer-group text-gold mr-1"></i> <span data-i18n="c2_lvl">Beginner+</span></span>
+          </div>
+          <a href="hairdressing.html" data-i18n="course_view" class="view-btn block text-center border border-ink/20 text-ink text-xs font-body font-semibold tracking-widest uppercase px-4 py-3 rounded-full">
+            View Course
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 3: Languages -->
+      <div class="course-card bg-white rounded-3xl overflow-hidden shadow-md group fade-up" style="transition-delay:0.2s">
+        <div class="overflow-hidden h-56 relative">
+          <img src="coloring.jpg" alt="Languages" class="card-img w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent"></div>
+          <div class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gold flex items-center justify-center shadow">
+            <i class="fa-solid fa-language text-ink text-xs"></i>
+          </div>
+          <div class="absolute bottom-4 left-4">
+            <span data-i18n="badge_new" class="bg-gold/90 text-ink text-[10px] font-body font-semibold tracking-widest uppercase px-3 py-1 rounded-full">New</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 data-i18n="c3_title" class="font-display text-2xl font-bold text-ink mb-2">Languages</h3>
+          <p data-i18n="c3_desc" class="font-body text-ink-muted text-sm leading-relaxed mb-5">
+            English, French, and more. Conversation-focused, fast-track programs designed to achieve real-world fluency confidently.
+          </p>
+          <div class="flex items-center justify-between text-xs text-ink-muted font-body mb-5">
+            <span><i class="fa-regular fa-clock text-gold mr-1"></i> <span data-i18n="c3_dur">6 Months</span></span>
+            <span><i class="fa-solid fa-layer-group text-gold mr-1"></i> <span data-i18n="c3_lvl">All Levels</span></span>
+          </div>
+          <a href="languages.html" data-i18n="course_view" class="view-btn block text-center border border-ink/20 text-ink text-xs font-body font-semibold tracking-widest uppercase px-4 py-3 rounded-full">
+            View Course
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 4: Cupping Therapy -->
+      <div class="course-card bg-white rounded-3xl overflow-hidden shadow-md group fade-up" style="transition-delay:0.3s">
+        <div class="overflow-hidden h-56 relative">
+          <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=700&q=80&fit=crop" alt="Cupping Therapy" class="card-img w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent"></div>
+          <div class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gold flex items-center justify-center shadow">
+            <i class="fa-solid fa-hand-holding-medical text-ink text-xs"></i>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 data-i18n="c4_title" class="font-display text-2xl font-bold text-ink mb-2">Cupping Therapy</h3>
+          <p data-i18n="c4_desc" class="font-body text-ink-muted text-sm leading-relaxed mb-5">
+            Certified Hijama training grounded in Islamic medicine. Learn techniques, safety protocols, and holistic wellness practice.
+          </p>
+          <div class="flex items-center justify-between text-xs text-ink-muted font-body mb-5">
+            <span><i class="fa-regular fa-clock text-gold mr-1"></i> <span data-i18n="c4_dur">2 Months</span></span>
+            <span><i class="fa-solid fa-layer-group text-gold mr-1"></i> <span data-i18n="c4_lvl">Certified</span></span>
+          </div>
+          <a href="hijama.html" data-i18n="course_view" class="view-btn block text-center border border-ink/20 text-ink text-xs font-body font-semibold tracking-widest uppercase px-4 py-3 rounded-full">
+            View Course
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 5: Traditional Crafts -->
+      <div class="course-card bg-white rounded-3xl overflow-hidden shadow-md group fade-up" style="transition-delay:0.4s">
+        <div class="overflow-hidden h-56 relative">
+          <img src="sweets.jpg" alt="Traditional Crafts" class="card-img w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent"></div>
+          <div class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gold flex items-center justify-center shadow">
+            <i class="fa-solid fa-palette text-ink text-xs"></i>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 data-i18n="c5_title" class="font-display text-2xl font-bold text-ink mb-2">Traditional Crafts</h3>
+          <p data-i18n="c5_desc" class="font-body text-ink-muted text-sm leading-relaxed mb-5">
+            Master ancestral skills in pottery, weaving, and traditional artisan techniques for modern markets.
+          </p>
+          <div class="flex items-center justify-between text-xs text-ink-muted font-body mb-5">
+            <span><i class="fa-regular fa-clock text-gold mr-1"></i> <span data-i18n="c5_dur">3 Months</span></span>
+            <span><i class="fa-solid fa-layer-group text-gold mr-1"></i> <span data-i18n="c5_lvl">Authentic</span></span>
+          </div>
+          <a href="crafts.html" data-i18n="course_view" class="view-btn block text-center border border-ink/20 text-ink text-xs font-body font-semibold tracking-widest uppercase px-4 py-3 rounded-full">
+            View Course
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 6: Administrative Fields -->
+      <div class="course-card bg-white rounded-3xl overflow-hidden shadow-md group fade-up" style="transition-delay:0.5s">
+        <div class="overflow-hidden h-56 relative">
+          <img src="https://images.unsplash.com/photo-1454165833767-027ffea9e77b?w=700&q=80&fit=crop" alt="Administration" class="card-img w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent"></div>
+          <div class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gold flex items-center justify-center shadow">
+            <i class="fa-solid fa-briefcase text-ink text-xs"></i>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 data-i18n="c6_title" class="font-display text-2xl font-bold text-ink mb-2">Administrative Fields</h3>
+          <p data-i18n="c6_desc" class="font-body text-ink-muted text-sm leading-relaxed mb-5">
+            Professional training in office management, secretarial skills, and modern business administration.
+          </p>
+          <div class="flex items-center justify-between text-xs text-ink-muted font-body mb-5">
+            <span><i class="fa-regular fa-clock text-gold mr-1"></i> <span data-i18n="c6_dur">4 Months</span></span>
+            <span><i class="fa-solid fa-layer-group text-gold mr-1"></i> <span data-i18n="c6_lvl">Professional</span></span>
+          </div>
+          <a href="admin.html" data-i18n="course_view" class="view-btn block text-center border border-ink/20 text-ink text-xs font-body font-semibold tracking-widest uppercase px-4 py-3 rounded-full">
+            View Course
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 7: Kindergarten Training -->
+      <div class="course-card bg-white rounded-3xl overflow-hidden shadow-md group fade-up" style="transition-delay:0s">
+        <div class="overflow-hidden h-56 relative">
+          <img src="mickey.jpg" alt="Kindergarten" class="card-img w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent"></div>
+          <div class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gold flex items-center justify-center shadow">
+            <i class="fa-solid fa-child text-ink text-xs"></i>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 data-i18n="c7_title" class="font-display text-2xl font-bold text-ink mb-2">Kindergarten Training</h3>
+          <p data-i18n="c7_desc" class="font-body text-ink-muted text-sm leading-relaxed mb-5">
+            Become a certified early childhood educator. Learn child psychology, activity planning, and safety protocols.
+          </p>
+          <div class="flex items-center justify-between text-xs text-ink-muted font-body mb-5">
+            <span><i class="fa-regular fa-clock text-gold mr-1"></i> <span data-i18n="c7_dur">3 Months</span></span>
+            <span><i class="fa-solid fa-layer-group text-gold mr-1"></i> <span data-i18n="c7_lvl">Certified</span></span>
+          </div>
+          <a href="kindergarten.html" data-i18n="course_view" class="view-btn block text-center border border-ink/20 text-ink text-xs font-body font-semibold tracking-widest uppercase px-4 py-3 rounded-full">
+            View Course
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 8: Language School -->
+      <div class="course-card bg-white rounded-3xl overflow-hidden shadow-md group fade-up" style="transition-delay:0.1s">
+        <div class="overflow-hidden h-56 relative">
+          <img src="coloring.jpg" alt="Language School" class="card-img w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent"></div>
+          <div class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gold flex items-center justify-center shadow">
+            <i class="fa-solid fa-globe text-ink text-xs"></i>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 data-i18n="c8_title" class="font-display text-2xl font-bold text-ink mb-2">Language School</h3>
+          <p data-i18n="c8_desc" class="font-body text-ink-muted text-sm leading-relaxed mb-5">
+            Expert-led courses in French, English, Italian, and German. Achieve fluency with immersive, conversational methods.
+          </p>
+          <div class="flex items-center justify-between text-xs text-ink-muted font-body mb-5">
+            <span><i class="fa-regular fa-clock text-gold mr-1"></i> <span data-i18n="c8_dur">Ongoing</span></span>
+            <span><i class="fa-solid fa-layer-group text-gold mr-1"></i> <span data-i18n="c8_lvl">Multi-lang</span></span>
+          </div>
+          <a href="languages.html" data-i18n="course_view" class="view-btn block text-center border border-ink/20 text-ink text-xs font-body font-semibold tracking-widest uppercase px-4 py-3 rounded-full">
+            View Course
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 9: Learning Theories -->
+      <div class="course-card bg-white rounded-3xl overflow-hidden shadow-md group fade-up" style="transition-delay:0.2s">
+        <div class="overflow-hidden h-56 relative">
+          <img src="coloring.jpg" alt="Learning Theories" class="card-img w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent"></div>
+          <div class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gold flex items-center justify-center shadow">
+            <i class="fa-solid fa-book-open text-ink text-xs"></i>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 data-i18n="c9_title" class="font-display text-2xl font-bold text-ink mb-2">Learning Theories</h3>
+          <p data-i18n="c9_desc" class="font-body text-ink-muted text-sm leading-relaxed mb-5">
+            Support lessons for educators and students in educational psychology and advanced learning methodologies.
+          </p>
+          <div class="flex items-center justify-between text-xs text-ink-muted font-body mb-5">
+            <span><i class="fa-regular fa-clock text-gold mr-1"></i> <span data-i18n="c9_dur">Flex</span></span>
+            <span><i class="fa-solid fa-layer-group text-gold mr-1"></i> <span data-i18n="c9_lvl">Supportive</span></span>
+          </div>
+          <a href="theories.html" data-i18n="course_view" class="view-btn block text-center border border-ink/20 text-ink text-xs font-body font-semibold tracking-widest uppercase px-4 py-3 rounded-full">
+            View Course
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 10: Summer School -->
+      <div class="course-card bg-white rounded-3xl overflow-hidden shadow-md group fade-up" style="transition-delay:0.3s">
+        <div class="overflow-hidden h-56 relative">
+          <img src="mickey.jpg" alt="Summer School" class="card-img w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent"></div>
+          <div class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gold flex items-center justify-center shadow">
+            <i class="fa-solid fa-sun text-ink text-xs"></i>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 data-i18n="c10_title" class="font-display text-2xl font-bold text-ink mb-2">Summer School</h3>
+          <p data-i18n="c10_desc" class="font-body text-ink-muted text-sm leading-relaxed mb-5">
+            Comprehensive summer programs dedicated to identifying and overcoming learning difficulties in a nurturing environment.
+          </p>
+          <div class="flex items-center justify-between text-xs text-ink-muted font-body mb-5">
+            <span><i class="fa-regular fa-clock text-gold mr-1"></i> <span data-i18n="c10_dur">Summer</span></span>
+            <span><i class="fa-solid fa-layer-group text-gold mr-1"></i> <span data-i18n="c10_lvl">Specialized</span></span>
+          </div>
+          <a href="summer.html" data-i18n="course_view" class="view-btn block text-center border border-ink/20 text-ink text-xs font-body font-semibold tracking-widest uppercase px-4 py-3 rounded-full">
+            View Course
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     ABOUT / FEATURE STRIP
+═══════════════════════════════════════════ -->
+<section id="about" class="bg-ink py-28 relative overflow-hidden">
+  <!-- Background accent -->
+  <div class="absolute top-0 right-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+      <!-- Left -->
+      <div class="fade-up">
+        <p class="font-body text-gold text-xs tracking-[0.3em] uppercase mb-4 font-medium"><span data-i18n="about_sub">Why Rabab Academy</span></p>
+        <h2 data-i18n="about_title" class="font-display text-5xl lg:text-6xl font-bold text-cream mb-6 leading-tight">
+          Where Passion <br/><em class="font-light not-italic text-gold">Meets Purpose</em>
+        </h2>
+        <div class="gold-line w-16 mb-8"></div>
+        <p data-i18n="about_desc" class="text-cream/55 font-body leading-relaxed mb-8 max-w-md">
+          Rabab Academy was founded on a single belief: every person carries a skill waiting to be unleashed. Our certified instructors and hands-on curriculum have helped over 1,200 graduates launch meaningful careers.
+        </p>
+        <a href="#enroll" data-i18n="about_btn" class="cta-btn inline-block text-ink font-body font-semibold px-8 py-4 rounded-full text-sm">
+          Join Our Community
+        </a>
+      </div>
+
+      <!-- Right: Feature list -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 fade-up">
+        <div class="bg-cream/5 border border-cream/10 rounded-2xl p-6 hover:border-gold/30 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-gold/15 flex items-center justify-center mb-4">
+            <i class="fa-solid fa-graduation-cap text-gold text-lg"></i>
+          </div>
+          <h4 data-i18n="f1_title" class="font-display text-xl font-bold text-cream mb-2">Expert Faculty</h4>
+          <p data-i18n="f1_desc" class="text-cream/45 font-body text-sm leading-relaxed">Instructors with 10+ years of industry experience in their fields.</p>
+        </div>
+        <div class="bg-cream/5 border border-cream/10 rounded-2xl p-6 hover:border-gold/30 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-gold/15 flex items-center justify-center mb-4">
+            <i class="fa-solid fa-certificate text-gold text-lg"></i>
+          </div>
+          <h4 data-i18n="f2_title" class="font-display text-xl font-bold text-cream mb-2">Accredited Cert.</h4>
+          <p data-i18n="f2_desc" class="text-cream/45 font-body text-sm leading-relaxed">Recognized certificates that open doors in local & global markets.</p>
+        </div>
+        <div class="bg-cream/5 border border-cream/10 rounded-2xl p-6 hover:border-gold/30 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-gold/15 flex items-center justify-center mb-4">
+            <i class="fa-solid fa-calendar-alt text-gold text-lg"></i>
+          </div>
+          <h4 data-i18n="f3_title" class="font-display text-xl font-bold text-cream mb-2">Flexible Times</h4>
+          <p data-i18n="f3_desc" class="text-cream/45 font-body text-sm leading-relaxed">Morning, afternoon & weekend sessions to fit your lifestyle.</p>
+        </div>
+        <div class="bg-cream/5 border border-cream/10 rounded-2xl p-6 hover:border-gold/30 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-gold/15 flex items-center justify-center mb-4">
+            <i class="fa-solid fa-hands-holding-circle text-gold text-lg"></i>
+          </div>
+          <h4 data-i18n="f4_title" class="font-display text-xl font-bold text-cream mb-2">Career Support</h4>
+          <p data-i18n="f4_desc" class="text-cream/45 font-body text-sm leading-relaxed">Post-graduation mentoring and job placement assistance.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     TESTIMONIALS
+═══════════════════════════════════════════ -->
+<section id="testimonials" class="py-28 bg-cream-warm">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="text-center mb-16 fade-up">
+      <p class="font-body text-gold text-xs tracking-[0.3em] uppercase mb-4 font-medium"><span data-i18n="test_sub">Student Stories</span></p>
+      <h2 data-i18n="test_title" class="font-display text-5xl lg:text-6xl font-bold text-ink">
+        Voices of <em class="font-light not-italic text-gold">Success</em>
+      </h2>
+      <div class="gold-line w-24 mx-auto mt-5"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 fade-up">
+
+      <div class="tcard bg-white rounded-3xl p-8 shadow-sm border border-ink/5">
+        <div class="flex gap-1 text-gold text-sm mb-5">
+          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+        </div>
+        <p data-i18n="t1_quote" class="font-display text-lg italic text-ink leading-relaxed mb-6">
+          "The sewing program completely transformed my life. I now run my own atelier from home and have more orders than I can handle."
+        </p>
+        <div class="flex items-center gap-3">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&q=80&fit=crop&crop=face" alt="Fatima" class="w-11 h-11 rounded-full object-cover border-2 border-gold/40" />
+          <div>
+            <div class="font-body font-semibold text-ink text-sm">Fatima B.</div>
+            <div data-i18n="t1_role" class="font-body text-ink-muted text-xs">Sewing Graduate, 2024</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tcard bg-ink rounded-3xl p-8 shadow-md border border-gold/20">
+        <div class="flex gap-1 text-gold text-sm mb-5">
+          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+        </div>
+        <p data-i18n="t2_quote" class="font-display text-lg italic text-cream leading-relaxed mb-6">
+          "I came in with zero knowledge of hairdressing. Eight months later, I'm managing my own salon. The instructors are incredibly dedicated."
+        </p>
+        <div class="flex items-center gap-3">
+          <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=80&q=80&fit=crop&crop=face" alt="Karima" class="w-11 h-11 rounded-full object-cover border-2 border-gold/40" />
+          <div>
+            <div class="font-body font-semibold text-cream text-sm">Karima M.</div>
+            <div data-i18n="t2_role" class="font-body text-cream/40 text-xs">Hairdressing Graduate, 2023</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tcard bg-white rounded-3xl p-8 shadow-sm border border-ink/5">
+        <div class="flex gap-1 text-gold text-sm mb-5">
+          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+        </div>
+        <p data-i18n="t3_quote" class="font-display text-lg italic text-ink leading-relaxed mb-6">
+          "The Hijama certification course was rigorous, professional, and deeply rooted in both science and tradition. Highly recommend."
+        </p>
+        <div class="flex items-center gap-3">
+          <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&q=80&fit=crop&crop=face" alt="Nadia" class="w-11 h-11 rounded-full object-cover border-2 border-gold/40" />
+          <div>
+            <div class="font-body font-semibold text-ink text-sm">Nadia R.</div>
+            <div data-i18n="t3_role" class="font-body text-ink-muted text-xs">Cupping Therapy Graduate, 2024</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     ENROLLMENT FORM
+═══════════════════════════════════════════ -->
+<section id="enroll" class="py-28 bg-cream relative overflow-hidden">
+  <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+
+  <!-- Decorative bg text -->
+  <div class="absolute top-12 left-1/2 -translate-x-1/2 font-display text-[10rem] font-bold text-ink/[0.03] select-none whitespace-nowrap pointer-events-none hidden lg:block">ENROLL</div>
+
+  <div class="max-w-3xl mx-auto px-6 lg:px-10 relative z-10">
+
+    <!-- Heading -->
+    <div class="text-center mb-14 fade-up">
+      <p class="font-body text-gold text-xs tracking-[0.3em] uppercase mb-4 font-medium"><span data-i18n="enroll_sub">Begin Today</span></p>
+      <h2 data-i18n="enroll_title" class="font-display text-5xl lg:text-6xl font-bold text-ink mb-4">
+        Reserve Your <em class="font-light not-italic text-gold">Seat</em>
+      </h2>
+      <div class="gold-line w-24 mx-auto mb-5"></div>
+      <p data-i18n="enroll_desc" class="text-ink-muted font-body text-sm max-w-md mx-auto">Fill in the form below and our enrollment team will contact you within 24 hours to confirm your spot.</p>
+    </div>
+
+    <!-- Form card -->
+    <div class="bg-white rounded-3xl shadow-xl border border-ink/5 p-8 lg:p-12 fade-up">
+      <form onsubmit="handleSubmit(event)">
+
+        <!-- Full Name -->
+        <div class="mb-6">
+          <label class="block font-body text-xs font-semibold tracking-widest uppercase text-ink-muted mb-2">
+            <i class="fa-regular fa-user text-gold mr-2"></i><span data-i18n="form_name">Full Name</span>
+          </label>
+          <input type="text" placeholder="e.g. Amina Benali" data-i18n-placeholder="form_name_ph" required
+            class="form-input w-full bg-cream rounded-xl border border-ink/15 px-5 py-4 font-body text-ink text-sm transition-all duration-200 placeholder:text-ink-muted/50" />
+        </div>
+
+        <!-- Email -->
+        <div class="mb-6">
+          <label class="block font-body text-xs font-semibold tracking-widest uppercase text-ink-muted mb-2">
+            <i class="fa-regular fa-envelope text-gold mr-2"></i><span data-i18n="form_email">Email Address</span>
+          </label>
+          <input type="email" placeholder="you@example.com" data-i18n-placeholder="form_email_ph" required
+            class="form-input w-full bg-cream rounded-xl border border-ink/15 px-5 py-4 font-body text-ink text-sm transition-all duration-200 placeholder:text-ink-muted/50" />
+        </div>
+
+        <!-- Phone -->
+        <div class="mb-8">
+          <label class="block font-body text-xs font-semibold tracking-widest uppercase text-ink-muted mb-2">
+            <i class="fa-solid fa-phone text-gold mr-2"></i><span data-i18n="form_phone">Phone Number</span>
+          </label>
+          <input type="tel" placeholder="+213 XX XX XX XX" data-i18n-placeholder="form_phone_ph" required
+            class="form-input w-full bg-cream rounded-xl border border-ink/15 px-5 py-4 font-body text-ink text-sm transition-all duration-200 placeholder:text-ink-muted/50" />
+        </div>
+
+        <!-- Field selection -->
+        <div class="mb-10">
+          <label class="block font-body text-xs font-semibold tracking-widest uppercase text-ink-muted mb-4">
+            <i class="fa-solid fa-compass text-gold mr-2"></i><span data-i18n="form_field">Choose Your Field</span>
+          </label>
+          <div class="grid grid-cols-2 gap-3">
+
+            <div class="field-radio">
+              <input type="radio" name="field" id="sewing" value="sewing" class="sr-only" required />
+              <label for="sewing" class="flex flex-col items-center gap-2 border-2 border-ink/15 rounded-2xl p-4 cursor-pointer text-ink-muted bg-cream hover:bg-cream-warm">
+                <i class="fa-solid fa-scissors text-2xl"></i>
+                <span data-i18n="c1_title" class="font-body text-xs font-semibold tracking-wide">Sewing & Fashion</span>
+              </label>
+            </div>
+
+            <div class="field-radio">
+              <input type="radio" name="field" id="hair" value="hairdressing" class="sr-only" />
+              <label for="hair" class="flex flex-col items-center gap-2 border-2 border-ink/15 rounded-2xl p-4 cursor-pointer text-ink-muted bg-cream hover:bg-cream-warm">
+                <i class="fa-solid fa-cut text-2xl"></i>
+                <span data-i18n="c2_title" class="font-body text-xs font-semibold tracking-wide">Hairdressing</span>
+              </label>
+            </div>
+
+            <div class="field-radio">
+              <input type="radio" name="field" id="lang" value="languages" class="sr-only" />
+              <label for="lang" class="flex flex-col items-center gap-2 border-2 border-ink/15 rounded-2xl p-4 cursor-pointer text-ink-muted bg-cream hover:bg-cream-warm">
+                <i class="fa-solid fa-language text-2xl"></i>
+                <span data-i18n="c3_title" class="font-body text-xs font-semibold tracking-wide">Languages</span>
+              </label>
+            </div>
+
+            <div class="field-radio">
+              <input type="radio" name="field" id="cupping" value="cupping" class="sr-only" />
+              <label for="cupping" class="flex flex-col items-center gap-2 border-2 border-ink/15 rounded-2xl p-4 cursor-pointer text-ink-muted bg-cream hover:bg-cream-warm text-center">
+                <i class="fa-solid fa-hand-holding-medical text-2xl"></i>
+                <span data-i18n="c4_title" class="font-body text-xs font-semibold tracking-wide">Cupping Therapy</span>
+              </label>
+            </div>
+
+            <div class="field-radio">
+              <input type="radio" name="field" id="crafts" value="crafts" class="sr-only" />
+              <label for="crafts" class="flex flex-col items-center gap-2 border-2 border-ink/15 rounded-2xl p-4 cursor-pointer text-ink-muted bg-cream hover:bg-cream-warm text-center">
+                <i class="fa-solid fa-palette text-2xl"></i>
+                <span data-i18n="c5_title" class="font-body text-xs font-semibold tracking-wide">Traditional Crafts</span>
+              </label>
+            </div>
+
+            <div class="field-radio">
+              <input type="radio" name="field" id="admin" value="admin" class="sr-only" />
+              <label for="admin" class="flex flex-col items-center gap-2 border-2 border-ink/15 rounded-2xl p-4 cursor-pointer text-ink-muted bg-cream hover:bg-cream-warm text-center">
+                <i class="fa-solid fa-briefcase text-2xl"></i>
+                <span data-i18n="c6_title" class="font-body text-xs font-semibold tracking-wide">Administrative</span>
+              </label>
+            </div>
+
+            <div class="field-radio">
+              <input type="radio" name="field" id="kinder" value="kinder" class="sr-only" />
+              <label for="kinder" class="flex flex-col items-center gap-2 border-2 border-ink/15 rounded-2xl p-4 cursor-pointer text-ink-muted bg-cream hover:bg-cream-warm text-center">
+                <i class="fa-solid fa-child text-2xl"></i>
+                <span data-i18n="c7_title" class="font-body text-xs font-semibold tracking-wide">Kindergarten</span>
+              </label>
+            </div>
+
+            <div class="field-radio">
+              <input type="radio" name="field" id="lang-school" value="languages-school" class="sr-only" />
+              <label for="lang-school" class="flex flex-col items-center gap-2 border-2 border-ink/15 rounded-2xl p-4 cursor-pointer text-ink-muted bg-cream hover:bg-cream-warm text-center">
+                <i class="fa-solid fa-globe text-2xl"></i>
+                <span data-i18n="c8_title" class="font-body text-xs font-semibold tracking-wide">Language School</span>
+              </label>
+            </div>
+
+            <div class="field-radio">
+              <input type="radio" name="field" id="theories" value="theories" class="sr-only" />
+              <label for="theories" class="flex flex-col items-center gap-2 border-2 border-ink/15 rounded-2xl p-4 cursor-pointer text-ink-muted bg-cream hover:bg-cream-warm text-center">
+                <i class="fa-solid fa-book-open text-2xl"></i>
+                <span data-i18n="c9_title" class="font-body text-xs font-semibold tracking-wide">Learning Theories</span>
+              </label>
+            </div>
+
+            <div class="field-radio">
+              <input type="radio" name="field" id="summer" value="summer" class="sr-only" />
+              <label for="summer" class="flex flex-col items-center gap-2 border-2 border-ink/15 rounded-2xl p-4 cursor-pointer text-ink-muted bg-cream hover:bg-cream-warm text-center">
+                <i class="fa-solid fa-sun text-2xl"></i>
+                <span data-i18n="c10_title" class="font-body text-xs font-semibold tracking-wide">Summer School</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Message (optional) -->
+        <div class="mb-8">
+          <label class="block font-body text-xs font-semibold tracking-widest uppercase text-ink-muted mb-2">
+            <i class="fa-regular fa-comment text-gold mr-2"></i><span data-i18n="form_msg">Message <span class="font-normal normal-case">(optional)</span></span>
+          </label>
+          <textarea rows="3" placeholder="Any questions or special requirements..." data-i18n-placeholder="form_msg_ph"
+            class="form-input w-full bg-cream rounded-xl border border-ink/15 px-5 py-4 font-body text-ink text-sm transition-all duration-200 resize-none placeholder:text-ink-muted/50"></textarea>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="submit-btn cta-btn w-full text-ink font-body font-semibold py-4 rounded-full text-base tracking-wide">
+          <span data-i18n="form_submit"><i class="fa-solid fa-paper-plane mr-2 text-sm"></i>Submit Enrollment</span>
+        </button>
+
+        <p class="text-center text-ink-muted/60 font-body text-xs mt-5">
+          <i class="fa-solid fa-shield-halved text-gold mr-1"></i>
+          <span data-i18n="form_secure">Your information is 100% confidential and will never be shared.</span>
+        </p>
+      </form>
+
+      <!-- Success message (hidden by default) -->
+      <div id="success-msg" class="hidden text-center py-8">
+        <div class="w-20 h-20 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-5">
+          <i class="fa-solid fa-check text-gold text-3xl"></i>
+        </div>
+        <h3 data-i18n="success_title" class="font-display text-3xl font-bold text-ink mb-2">You're In!</h3>
+        <p data-i18n="success_desc" class="font-body text-ink-muted text-sm">Our team will reach out within 24 hours to confirm your enrollment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     GALLERY
+═══════════════════════════════════════════ -->
+<section class="py-28 bg-ink relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+    <div class="text-center mb-16 fade-up">
+      <p class="font-body text-gold text-xs tracking-[0.3em] uppercase mb-4 font-medium"><span data-i18n="gallery_sub">Academy Life</span></p>
+      <h2 data-i18n="gallery_title" class="font-display text-5xl lg:text-6xl font-bold text-cream">
+        Moments of <em class="font-light not-italic text-gold">Learning</em>
+      </h2>
+      <div class="gold-line w-24 mx-auto mt-5"></div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 fade-up">
+      <div class="group relative overflow-hidden rounded-2xl aspect-square">
+        <img src="mickey.jpg" alt="Kids at Rabab Academy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+        <div class="absolute inset-0 bg-ink/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <span data-i18n="hero_img3" class="text-cream font-display text-xl italic">Kids Activities</span>
+        </div>
+      </div>
+      <div class="group relative overflow-hidden rounded-2xl aspect-square">
+        <img src="coloring.jpg" alt="Learning at Rabab Academy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+        <div class="absolute inset-0 bg-ink/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <span data-i18n="hero_img4" class="text-cream font-display text-xl italic">Languages</span>
+        </div>
+      </div>
+      <div class="group relative overflow-hidden rounded-2xl aspect-square">
+        <img src="sweets.jpg" alt="Sweets at Rabab Academy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+        <div class="absolute inset-0 bg-ink/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <span data-i18n="hero_img1" class="text-cream font-display text-xl italic">Traditional Sweets</span>
+        </div>
+      </div>
+      <div class="group relative overflow-hidden rounded-2xl aspect-square">
+        <img src="hairdressing.jpg" alt="Hairdressing at Rabab Academy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+        <div class="absolute inset-0 bg-ink/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <span data-i18n="hero_img2" class="text-cream font-display text-xl italic">Hairdressing</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer class="bg-ink pt-20 pb-10">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+
+      <!-- Brand -->
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-lg">
+            <i class="fa-solid fa-star text-ink text-sm"></i>
+          </div>
+          <div>
+            <span data-i18n="nav_logo_title" class="font-display text-xl font-bold text-cream block">Rabab Academy</span>
+            <span data-i18n="nav_logo_subtitle" class="text-[10px] text-gold tracking-[0.25em] uppercase font-body">Premium Skills</span>
+          </div>
+        </div>
+        <p data-i18n="footer_desc" class="text-cream/40 font-body text-sm leading-relaxed max-w-xs mb-6">
+          Empowering individuals with premium vocational skills for a brighter, more confident future.
+        </p>
+        <div class="flex gap-3">
+          <a href="#" class="w-9 h-9 rounded-full border border-cream/15 flex items-center justify-center text-cream/40 hover:border-gold hover:text-gold transition-all duration-200">
+            <i class="fa-brands fa-instagram text-sm"></i>
+          </a>
+          <a href="https://www.facebook.com/profile.php?id=61572890673464" class="w-9 h-9 rounded-full border border-cream/15 flex items-center justify-center text-cream/40 hover:border-gold hover:text-gold transition-all duration-200">
+            <i class="fa-brands fa-facebook-f text-sm"></i>
+          </a>
+          <a href="#" class="w-9 h-9 rounded-full border border-cream/15 flex items-center justify-center text-cream/40 hover:border-gold hover:text-gold transition-all duration-200">
+            <i class="fa-brands fa-whatsapp text-sm"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Links -->
+      <div>
+        <h5 data-i18n="footer_prog" class="font-body text-xs font-semibold tracking-widest uppercase text-gold mb-5">Programs</h5>
+        <ul class="space-y-3">
+          <li><a href="#enroll" data-i18n="c1_title" class="text-cream/40 font-body text-sm hover:text-gold transition-colors duration-200">Sewing & Fashion</a></li>
+          <li><a href="#enroll" data-i18n="c2_title" class="text-cream/40 font-body text-sm hover:text-gold transition-colors duration-200">Hairdressing</a></li>
+          <li><a href="#enroll" data-i18n="c8_title" class="text-cream/40 font-body text-sm hover:text-gold transition-colors duration-200">Language School</a></li>
+          <li><a href="#enroll" data-i18n="c7_title" class="text-cream/40 font-body text-sm hover:text-gold transition-colors duration-200">Kindergarten Training</a></li>
+          <li><a href="#enroll" data-i18n="c10_title" class="text-cream/40 font-body text-sm hover:text-gold transition-colors duration-200">Summer School</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h5 data-i18n="footer_cont" class="font-body text-xs font-semibold tracking-widest uppercase text-gold mb-5">Contact</h5>
+        <ul class="space-y-3 text-cream/40 font-body text-sm">
+          <li class="flex items-start gap-2">
+            <i class="fa-solid fa-location-dot text-gold mt-0.5 text-xs"></i>
+            <span data-i18n="footer_addr">khenchela, Algeria</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <i class="fa-solid fa-phone text-gold text-xs"></i>
+            +213 6 76 22 50 07
+
+          </li>
+          <li class="flex items-center gap-2">
+            <i class="fa-regular fa-envelope text-gold text-xs"></i>
+            info@rababacademy.dz
+          </li>
+          <li class="flex items-center gap-2">
+            <i class="fa-regular fa-clock text-gold text-xs"></i>
+            <span data-i18n="footer_time">Sat–Thu, 8:00 AM – 6:00 PM</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="gold-line mb-8"></div>
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 text-cream/25 font-body text-xs">
+      <span data-i18n="footer_copy">© 2025 Rabab Academy. All rights reserved.</span>
+      <span data-i18n="footer_design">Designed with <i class="fa-solid fa-heart text-gold text-[10px] mx-1"></i> for skill-seekers everywhere</span>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ═══════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════ -->
+<script>
+  // Intersection Observer for fade-up
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Form submit handler
+  function handleSubmit(e) {
+    e.preventDefault();
+    e.target.style.display = 'none';
+    document.getElementById('success-msg').classList.remove('hidden');
+    document.getElementById('success-msg').classList.add('fade-up', 'visible');
+  }
+
+  // ---- I18N and Dark Mode Configuration ----
+  const translations = {
+    en: {
+      nav_logo_title: "Rabab Academy", nav_logo_subtitle: "Premium Design",
+      nav_courses: "Courses", nav_about: "About", nav_stories: "Stories", nav_enroll: "Enroll Now",
+      hero_badge: "Certified Excellence",
+      hero_title: "Craft Your <br/><em class='text-gold font-light not-italic'>Future</em> <br/>With Skill",
+      hero_desc: "Premium hands-on training in Sewing, Hairdressing, Languages & Cupping Therapy. Transform passion into profession with world-class instructors.",
+      hero_btn1: "Start Your Journey &nbsp;<i class='fa-solid fa-arrow-right text-sm'></i>",
+      hero_btn2: "Explore Courses",
+      stat_graduates: "Graduates", stat_spec: "Specializations", stat_sat: "Satisfaction",
+      hero_img1: "Traditional Sweets", hero_img2: "Hairdressing", hero_img3: "Kids Activities", hero_img4: "Languages",
+      brand_1: "Ministry Certified", brand_2: "Expert Instructors", brand_3: "Accredited Certificates", brand_4: "Flexible Schedules", brand_5: "Lifetime Support",
+      courses_sub: "Our Specializations",
+      courses_title: "Four Paths to <em class='font-light not-italic text-gold'>Mastery</em>",
+      courses_desc: "Immerse yourself in a discipline that speaks to you. Each program is designed by industry experts to take you from beginner to professional.",
+      c1_title: "Sewing & Fashion", c1_desc: "From basic stitching to haute couture. Master patterns, tailoring, and garment construction with professional machines.", c1_dur: "3 Months", c1_lvl: "All Levels",
+      c2_title: "Hairdressing & Barbering", c2_desc: "Learn cuts, coloring, styling, and barbering techniques from salon professionals. Build your clientele from day one.", c2_dur: "4 Months", c2_lvl: "Beginner+",
+      c3_title: "Languages", c3_desc: "English, French, and more. Conversation-focused, fast-track programs designed to achieve real-world fluency confidently.", c3_dur: "6 Months", c3_lvl: "All Levels",
+      c4_title: "Cupping Therapy", c4_desc: "Certified Hijama training grounded in Islamic medicine. Learn techniques, safety protocols, and holistic wellness practice.", c4_dur: "2 Months", c4_lvl: "Certified",
+      c5_title: "Traditional Crafts", c5_desc: "Master ancestral skills in pottery, weaving, and traditional artisan techniques for modern markets.", c5_dur: "3 Months", c5_lvl: "Authentic",
+      c6_title: "Administrative Fields", c6_desc: "Professional training in office management, secretarial skills, and modern business administration.", c6_dur: "4 Months", c6_lvl: "Professional",
+      c7_title: "Kindergarten Training", c7_desc: "Become a certified early childhood educator. Learn child psychology, activity planning, and safety protocols.", c7_dur: "3 Months", c7_lvl: "Certified",
+      c8_title: "Language School", c8_desc: "Expert-led courses in French, English, Italian, and German. Achieve fluency with immersive, conversational methods.", c8_dur: "Ongoing", c8_lvl: "Multi-lang",
+      c9_title: "Learning Theories", c9_desc: "Support lessons for educators and students in educational psychology and advanced learning methodologies.", c9_dur: "Flex", c9_lvl: "Supportive",
+      c10_title: "Summer School", c10_desc: "Comprehensive summer programs dedicated to identifying and overcoming learning difficulties in a nurturing environment.", c10_dur: "Summer", c10_lvl: "Specialized",
+      course_view: "View Course", badge_pop: "Popular", badge_new: "New",
+      about_sub: "Why Rabab Academy",
+      about_title: "Where Passion <br/><em class='font-light not-italic text-gold'>Meets Purpose</em>",
+      about_desc: "Rabab Academy was founded on a single belief: every person carries a skill waiting to be unleashed. Our certified instructors and hands-on curriculum have helped over 1,200 graduates launch meaningful careers.",
+      about_btn: "Join Our Community",
+      f1_title: "Expert Faculty", f1_desc: "Instructors with 10+ years of industry experience in their fields.",
+      f2_title: "Accredited Cert.", f2_desc: "Recognized certificates that open doors in local & global markets.",
+      f3_title: "Flexible Times", f3_desc: "Morning, afternoon & weekend sessions to fit your lifestyle.",
+      f4_title: "Career Support", f4_desc: "Post-graduation mentoring and job placement assistance.",
+      test_sub: "Student Stories",
+      test_title: "Voices of <em class='font-light not-italic text-gold'>Success</em>",
+      t1_quote: '"The sewing program completely transformed my life. I now run my own atelier from home and have more orders than I can handle."', t1_role: "Sewing Graduate, 2024",
+      t2_quote: '"I came in with zero knowledge of hairdressing. Eight months later, I\'m managing my own salon. The instructors are incredibly dedicated."', t2_role: "Hairdressing Graduate, 2023",
+      t3_quote: '"The Hijama certification course was rigorous, professional, and deeply rooted in both science and tradition. Highly recommend."', t3_role: "Cupping Therapy Graduate, 2024",
+      enroll_sub: "Begin Today",
+      enroll_title: "Reserve Your <em class='font-light not-italic text-gold'>Seat</em>",
+      enroll_desc: "Fill in the form below and our enrollment team will contact you within 24 hours to confirm your spot.",
+      form_name: "Full Name", form_email: "Email Address", form_phone: "Phone Number", form_field: "Choose Your Field",
+      form_msg: "Message <span class='font-normal normal-case'>(optional)</span>",
+      form_submit: "<i class='fa-solid fa-paper-plane mr-2 text-sm'></i>Submit Enrollment",
+      form_secure: "Your information is 100% confidential and will never be shared.",
+      success_title: "You're In!", success_desc: "Our team will reach out within 24 hours to confirm your enrollment.",
+      gallery_sub: "Academy Life", gallery_title: "Moments of <em class='font-light not-italic text-gold'>Learning</em>",
+      form_name_ph: "e.g. Amina Benali", form_email_ph: "you@example.com", form_phone_ph: "+213 XX XX XX XX", form_msg_ph: "Any questions or special requirements...",
+      footer_desc: "Empowering individuals with premium vocational skills for a brighter, more confident future.",
+      footer_prog: "Programs", footer_cont: "Contact", footer_addr: "Khenchela, Algeria", footer_time: "Sat–Thu, 8:00 AM – 6:00 PM", footer_copy: "© 2025 Rabab Academy. All rights reserved.",
+      footer_design: "Designed with <i class='fa-solid fa-heart text-gold text-[10px] mx-1'></i> for by HAFIDI-tech"
+    },
+    ar: {
+      nav_logo_title: "أكاديمية رباب", nav_logo_subtitle: "تصميم متميز",
+      nav_courses: "الدورات", nav_about: "من نحن", nav_stories: "قصص النجاح", nav_enroll: "سجل الآن",
+      hero_badge: "امتياز معتمد",
+      hero_title: "اصنع <br/><em class='text-gold font-light not-italic'>مستقبلك</em> <br/>بمهارة",
+      hero_desc: "تدريب عملي متميز في الخياطة، الحلاقة، اللغات، والحجامة. حوّل شغفك إلى مهنة مع مدربين على مستوى عالمي.",
+      hero_btn1: "<i class='fa-solid fa-arrow-left text-sm ml-2'></i> ابدأ رحلتك",
+      hero_btn2: "استكشف الدورات",
+      stat_graduates: "خريج", stat_spec: "تخصصات", stat_sat: "رضا",
+      hero_img1: "الحلويات التقليدية", hero_img2: "الحلاقة", hero_img3: "أنشطة الأطفال", hero_img4: "اللغات",
+      brand_1: "معتمد من الوزارة", brand_2: "مدربون خبراء", brand_3: "شهادات معتمدة", brand_4: "أوقات مرنة", brand_5: "دعم مستمر",
+      courses_sub: "تخصصاتنا",
+      courses_title: "عديد المسارات نحو <em class='font-light not-italic text-gold'>الاحتراف</em>",
+      courses_desc: "انغمس في المجال الذي يلهمك. كل برنامج مصمم من قبل خبراء الصناعة ليأخذك من مبتدئ إلى محترف.",
+      c1_title: "الخياطة والأزياء", c1_desc: "من الخياطة الأساسية إلى تصميم الأزياء الراقية. أتقن التفصيل والخياطة باستخدام آلات احترافية.", c1_dur: "3 أشهر", c1_lvl: "جميع المستويات",
+      c2_title: "الحلاقة والتجميل", c2_desc: "تعلم تقنيات القص، الصبغ، والتسريح من محترفي الصالونات. ابدأ في بناء قاعدة عملائك من اليوم الأول.", c2_dur: "4 أشهر", c2_lvl: "مبتدئ فما فوق",
+      c3_title: "اللغات", c3_desc: "الإنجليزية، الفرنسية والمزيد. برامج مكثفة تركز على المحادثة مصممة لتحقيق الطلاقة بثقة.", c3_dur: "6 أشهر", c3_lvl: "جميع المستويات",
+      c4_title: "الحجامة", c4_desc: "تدريب معتمد في الحجامة يستند إلى الطب الإسلامي. تعلم التقنيات، بروتوكولات السلامة، والصحة الشاملة.", c4_dur: "شهرين", c4_lvl: "معتمد",
+      c5_title: "الحرف التقليدية", c5_desc: "دورات تكوينية متميزة في مجال الحرف التقليدية والأصيلة لإحياء الموروث وتطوير المهارات.", c5_dur: "3 أشهر", c5_lvl: "أصيل",
+      c6_title: "المجالات الإدارية", c6_desc: "تكوين احترافي في تسيير المكاتب، السكرتارية، والإدارة الحديثة للمؤسسات.", c6_dur: "4 أشهر", c6_lvl: "احترافي",
+      c7_title: "رياض الأطفال", c7_desc: "تكوين متخصص لمربيات ومربي الأطفال. تعلم علم نفس الطفل وتخطيط الأنشطة التربوية.", c7_dur: "3 أشهر", c7_lvl: "معتمد",
+      c8_title: "مدرسة اللغات", c8_desc: "تعليم اللغات (الفرنسية، الإنجليزية، الإيطالية، والألمانية) بأساليب تفاعلية وحديثة.", c8_dur: "مستمر", c8_lvl: "متعدد اللغات",
+      c9_title: "نظريات التعلم", c9_desc: "دروس تدعيمية معمقة في نظريات التعلم وعلم النفس التربوي للمعلمين والطلبة.", c9_dur: "مرن", c9_lvl: "تدعيمي",
+      c10_title: "صعوبات التعلم", c10_desc: "مدرسة صيفية شاملة مخصصة لتشخيص وتجاوز صعوبات التعلم في بيئة تعليمية داعمة.", c10_dur: "صيفي", c10_lvl: "متخصص",
+      course_view: "عرض الدورة", badge_pop: "شائع", badge_new: "جديد",
+      about_sub: "لماذا أكاديمية رباب",
+      about_title: "حيث يلتقي الشغف <br/><em class='font-light not-italic text-gold'>بالهدف</em>",
+      about_desc: "تأسست أكاديمية رباب على إيمان واحد: كل شخص يحمل مهارة تنتظر أن تُطلق. ساعد مدربونا المعتمدون أكثر من 1200 خريج على إطلاق مسيرات مهنية ناجحة.",
+      about_btn: "انضم إلى مجتمعنا",
+      f1_title: "هيئة تدريس خبيرة", f1_desc: "مدربون يتمتعون بأكثر من 10 سنوات من الخبرة في مجالاتهم.",
+      f2_title: "شهادات معتمدة", f2_desc: "شهادات معترف بها تفتح لك الأبواب في الأسواق المحلية والعالمية.",
+      f3_title: "أوقات مرنة", f3_desc: "حصص صباحية ومسائية وعطلات نهاية الأسبوع لتناسب نمط حياتك.",
+      f4_title: "دعم مهني", f4_desc: "توجيه ما بعد التخرج والمساعدة في الحصول على وظيفة.",
+      test_sub: "قصص الطلاب",
+      test_title: "أصوات <em class='font-light not-italic text-gold'>النجاح</em>",
+      t1_quote: '"لقد غيّر برنامج الخياطة حياتي تمامًا. أنا الآن أدير مشغلي الخاص من المنزل ولدي طلبات أكثر مما أستطيع تلبيته."', t1_role: "خريجة خياطة، 2024",
+      t2_quote: '"جئت بلا أي معرفة بالحلاقة. بعد ثمانية أشهر، أدير صالوني الخاص. المدربون مخلصون بشكل لا يصدق."', t2_role: "خريجة حلاقة، 2023",
+      t3_quote: '"كانت دورة شهادة الحجامة صارمة واحترافية ومتجذرة بعمق في العلم والتقاليد. أوصي بها بشدة."', t3_role: "خريجة حجامة، 2024",
+      enroll_sub: "ابدأ اليوم",
+      enroll_title: "احجز <em class='font-light not-italic text-gold'>مقعدك</em>",
+      enroll_desc: "املأ النموذج أدناه وسيتواصل معك فريق التسجيل لدينا خلال 24 ساعة لتأكيد مقعدك.",
+      form_name: "الاسم الكامل", form_email: "البريد الإلكتروني", form_phone: "رقم الهاتف", form_field: "اختر تخصصك",
+      form_msg: "رسالة <span class='font-normal normal-case'>(اختياري)</span>",
+      form_submit: "<i class='fa-solid fa-paper-plane ml-2 text-sm'></i>تأكيد التسجيل",
+      form_secure: "معلوماتك سرية بنسبة 100٪ ولن تتم مشاركتها أبدًا.",
+      success_title: "تم التسجيل!", success_desc: "سيتواصل معك فريقنا خلال 24 ساعة لتأكيد تسجيلك.",
+      gallery_sub: "حياة الأكاديمية", gallery_title: "لحظات من <em class='font-light not-italic text-gold'>التعلم</em>",
+      form_name_ph: "مثال: أمينة بن علي", form_email_ph: "you@example.com", form_phone_ph: "+213 676 22 50 07", form_msg_ph: "أي أسئلة أو متطلبات خاصة...",
+      footer_desc: "تمكين الأفراد بمهارات مهنية متميزة من أجل مستقبل أكثر إشراقًا وثقة.",
+      footer_prog: "البرامج", footer_cont: "اتصل بنا", footer_addr: "خنشلة، الجزائر", footer_time: "السبت–الخميس، 8:00 صباحاً – 6:00 مساءً", footer_copy: "© 2025 أكاديمية رباب. جميع الحقوق محفوظة.",
+      footer_design: "صُمم بحب <i class='fa-solid fa-heart text-gold text-[10px] mx-1'></i> عن طريق حفيظي إسلام"
+    }
+  };
+
+  let currentLang = localStorage.getItem('lang') || 'ar';
+  let isDarkMode = localStorage.getItem('theme') === 'dark';
+
+  function applyLanguage() {
+    document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+    document.documentElement.setAttribute('lang', currentLang);
+    const langText = document.getElementById('lang-text');
+    const langTextMobile = document.getElementById('lang-text-mobile');
+    if(langText) langText.innerText = currentLang === 'ar' ? 'EN' : 'AR';
+    if(langTextMobile) langTextMobile.innerText = currentLang === 'ar' ? 'EN' : 'AR';
+    
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if(translations[currentLang] && translations[currentLang][key]) {
+        el.innerHTML = translations[currentLang][key];
+      }
+    });
+
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if(translations[currentLang] && translations[currentLang][key]) {
+        el.placeholder = translations[currentLang][key];
+      }
+    });
+  }
+
+  function toggleLanguage() {
+    currentLang = currentLang === 'en' ? 'ar' : 'en';
+    localStorage.setItem('lang', currentLang);
+    applyLanguage();
+  }
+
+  function applyTheme() {
+    const icon = document.getElementById('dark-icon');
+    const iconMobile = document.getElementById('dark-icon-mobile');
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      if(icon) { icon.classList.remove('fa-moon'); icon.classList.add('fa-sun'); }
+      if(iconMobile) { iconMobile.classList.remove('fa-moon'); iconMobile.classList.add('fa-sun'); }
+    } else {
+      document.documentElement.classList.remove('dark');
+      if(icon) { icon.classList.remove('fa-sun'); icon.classList.add('fa-moon'); }
+      if(iconMobile) { iconMobile.classList.remove('fa-sun'); iconMobile.classList.add('fa-moon'); }
+    }
+  }
+
+  function toggleDarkMode() {
+    isDarkMode = !isDarkMode;
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    applyTheme();
+  }
+
+  // Initial application on load
+  applyTheme();
+  applyLanguage();
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+
+</body>
+</html>

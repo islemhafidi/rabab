@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kindergarten Training — Rabab Academy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { gold: { DEFAULT: '#C9A84C', light: '#E8C97A', dark: '#9E7A2A' }, ink: { DEFAULT: '#1A1612', soft: '#2E2921', muted: '#6B6355' }, cream: { DEFAULT: '#FAF7F2', warm: '#F2EDE5' } }, fontFamily: { display: ['"Cormorant Garamond"', 'serif'], body: ['"DM Sans"', 'sans-serif'], cairo: ['"Cairo"', 'sans-serif'] } } } }
+  </script>
+  <style>
+    body { font-family: 'DM Sans', sans-serif; background: #FAF7F2; color: #1A1612; transition: background 0.3s; }
+    html.dark body { background: #1A1612; color: #FAF7F2; }
+    html[dir="rtl"] body { font-family: 'Cairo', sans-serif !important; }
+    .hero-bg { background: linear-gradient(135deg, #1A1612 0%, #2E2921 50%, #1A1612 100%); padding: 8rem 0; text-align: center; }
+    .lang-card { transition: transform 0.4s; padding: 2rem; border-radius: 1.5rem; background: white; border: 1px solid rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+<nav class="fixed top-0 left-0 right-0 z-50 bg-ink/95 backdrop-blur-md border-b border-gold/20 p-4">
+  <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <a href="/" class="text-cream font-display text-xl font-bold">Rabab Academy</a>
+    <a href="/" class="text-cream/70 hover:text-gold text-sm">Back to Home</a>
+  </div>
+</nav>
+<section class="hero-bg">
+  <div class="max-w-4xl mx-auto px-6">
+    <h1 data-i18n="kinder_title" class="text-5xl lg:text-7xl font-bold text-cream mb-6">Kindergarten <em class="text-gold font-light not-italic">Training</em></h1>
+    <p data-i18n="kinder_desc" class="text-cream/60 text-lg">Become a certified early childhood educator. Learn child psychology and safety protocols.</p>
+  </div>
+</section>
+<section class="py-20 bg-cream">
+  <div class="max-w-3xl mx-auto px-6">
+    <div class="lang-card shadow-xl">
+      <h2 class="text-3xl font-bold mb-6">Course Overview</h2>
+      <ul class="space-y-4 mb-8">
+        <li><i class="fa-solid fa-check text-gold mr-2"></i> Early Child Psychology</li>
+        <li><i class="fa-solid fa-check text-gold mr-2"></i> Educational Activity Planning</li>
+        <li><i class="fa-solid fa-check text-gold mr-2"></i> Child Nutrition & Safety</li>
+        <li><i class="fa-solid fa-check text-gold mr-2"></i> Classroom Management</li>
+      </ul>
+      <div class="flex justify-between border-t pt-6">
+        <div><span class="block text-xs uppercase text-muted mb-1">Price</span><span class="text-2xl font-bold">14,000 DA / Month</span></div>
+        <div><span class="block text-xs uppercase text-muted mb-1">Duration</span><span class="text-2xl font-bold">3 Months</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  const translations = { en: { kinder_title: "Kindergarten <em class='text-gold font-light not-italic'>Training</em>", kinder_desc: "Become a certified early childhood educator. Learn child psychology and safety protocols." }, ar: { kinder_title: "تكوين <em class='text-gold font-light not-italic'>رياض الأطفال</em>", kinder_desc: "كن مربياً معتمداً للطفولة المبكرة. تعلم علم نفس الطفل وبروتوكولات السلامة." } };
+  let currentLang = localStorage.getItem('lang') || 'ar';
+  function applyLanguage() { document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr'); document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if(translations[currentLang][key]) el.innerHTML = translations[currentLang][key]; }); }
+  applyLanguage();
+</script>
+</body>
+</html>
